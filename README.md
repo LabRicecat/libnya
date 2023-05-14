@@ -62,6 +62,12 @@ $ catcare get labricecat/nyasm@main
 - **Return:** Int  
 - **Information:** Logical AND operator (`&&`)
 
+### _stdXOR*
+- **Arguments:** 2  
+- **Return:** Int  
+- **Information:** Binary XOR operator (`^`)
+
+
 ### _stdGRE
 - **Arguments:** 2  
 - **Return:** Int  
@@ -77,7 +83,7 @@ $ catcare get labricecat/nyasm@main
 - **Return:** Int  
 - **Information:** Equal comperator operator (`==`)
 
-### _stdNEW
+### _stdNEQ
 - **Arguments:**   
 - **Return:** Int  
 - **Information:** Not equal comperator operator (`!=`)
