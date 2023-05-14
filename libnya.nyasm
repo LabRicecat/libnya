@@ -1,0 +1,194 @@
+jump __LIBNE
+
+_stdCAP:
+    jumpif [spt-%1] %0 _stdCAP_LO
+_stdCAP_HI:
+    move %1 %rv1
+    return 
+_stdCAP_LO:
+    move %0 %rv1
+    return
+
+_stdNOT:
+    push [spt-%1]
+    add [spt-%1] %1 {spt-%1}
+    call _stdCAP
+    pop
+    return
+
+_stdMOD:
+    div [spt-%1] [spt-%2] %rv1
+    mul [spt-%2] rv1 %rv1 
+    sub [spt-%1] rv1 %rv1 
+    return
+
+_stdABS:
+    push %0
+    mul [spt-%2] %2 spt
+    add [spt] %1 spt
+    push %2
+    push [spt-%1]
+    call _stdMOD
+    pop
+    pop
+    move rv1 spt
+    mul [spt-%2] [spt] %rv1
+    pop
+    return
+
+_stdMIN:
+    sub [spt-%1] [spt-%2] %rv1 
+    push rv1
+    call _stdABS 
+    pop
+    sub [spt-%2] rv1 %rv1
+    add [spt-%1] rv1 %rv1 
+    div rv1 %2 %rv1
+    return 
+
+_stdMAX:
+    sub [spt-%1] [spt-%2] %rv1 
+    push rv1
+    call _stdABS 
+    pop
+    add [spt-%2] rv1 %rv1
+    add [spt-%1] rv1 %rv1 
+    div rv1 %2 %rv1
+    return
+ 
+_stdBOR:
+    return
+
+_stdLOR:
+    jumpif [spt-%1] %0 _stdLOR1
+    move %1 %rv1
+    return
+_stdLOR1:
+    jumpif [spt-%2] %0 _stdLOR2
+    move %1 %rv1
+    return
+_stdLOR2:
+    move %0 %rv1
+    return
+
+_stdBAN:
+    push [spt-%1]
+    push [spt-%3]
+    push %0
+    push %1
+_stdBAN1:
+    jumpif [spt-%2] %0 _stdBAN2
+    jumpif [spt-%3] %0 _stdBAN2
+    push %2
+    push [spt-%3]
+    call _stdMOD
+    pop
+    pop
+    move rv1 %rv2
+    push %2
+    push [spt-%4]
+    call _stdMOD
+    pop
+    pop
+    jumpif rv1 %0 _stdBAN3
+    jumpif rv2 %0 _stdBAN3
+    add [spt-%1] [spt] {spt-%1}
+_stdBAN3:
+    mul [spt] %2 spt
+    div [spt-%2] %2 {spt-%2}    
+    div [spt-%3] %2 {spt-%3}
+    jump _stdBAN1
+_stdBAN2:
+    pop
+    move [spt] %rv1
+    pop
+    pop
+    pop
+    return
+
+_stdLAN:
+    jumpif [spt-%1] %0 _stdLAN1
+    jumpif [spt-%2] %0 _stdLAN1
+    move %1 %rv1
+    return
+_stdLAN1:
+    move %0 %rv1
+    return
+
+_stdXOR:
+    return
+
+_stdGRE:
+    push [spt-%1]
+    push [spt-%3]
+    call _stdMAX 
+    pop 
+    pop
+    jumpif [spt-%2] rv1 _stdGRE1
+    move %0 %rv1 
+    return
+_stdGRE1:
+    move %1 %rv1 
+    return
+
+_stdLES:
+    push [spt-%1]
+    push [spt-%3]
+    call _stdMAX 
+    pop 
+    pop
+    jumpif [spt-%1] rv1 _stdLES1
+    move %0 %rv1 
+    return
+_stdLES1:
+    move %1 %rv1 
+    return
+
+_stdEQS:
+    jumpif [spt-%1] [spt-%2] _stdEQS1
+    move %0 %rv1
+    return
+_stdEQS1:
+    move %1 %rv1
+    return
+
+_stdNEQ:
+    jumpif [spt-%1] [spt-%2] _stdNEQ1
+    move %1 %rv1
+    return
+_stdNEQ1:
+    move %0 %rv1
+    return
+
+_stdGEQ:
+    jumpif [spt-%1] [spt-%2] _stdGEQ1
+    call _stdGRE
+    jumpif rv1 %1 _stdGEQ1
+    move %0 %rv1
+    return
+_stdGEQ1:
+    move %1 %rv1
+    return
+
+_stdLEQ:
+    jumpif [spt-%1] [spt-%2] _stdLEQ1
+    call _stdLES
+    jumpif rv1 %1 _stdLEQ1
+    move %0 %rv1
+    return
+_stdLEQ1:
+    move %1 %rv1
+    return
+
+_stdNEG:
+    sub %0 [spt-%1] %rv1
+    return
+
+_stdBNO:
+    push [spt-%1]
+    call _stdNEG
+    pop
+    sub rv1 %1 %rv1
+    return
+
+__LIBNE:

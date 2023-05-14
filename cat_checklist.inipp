@@ -1,0 +1,9 @@
+
+[Info]
+name = "libnya"
+version = "0.0.0"
+description = "A utility library written in nyasm"
+license = "MIT"
+
+[Download]
+files = [] 
