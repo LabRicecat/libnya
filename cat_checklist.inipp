@@ -6,4 +6,4 @@ description = "A utility library written in nyasm"
 license = "MIT"
 
 [Download]
-files = [] 
+files = ["libnya.nyasm","interface.hpp"] 
